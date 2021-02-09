@@ -3,32 +3,61 @@ import { StatusBar } from 'expo-status-bar';
 import { ScrollView, View, Text, Image, FlatList, SafeAreaView, StyleSheet, TouchableOpacity, TextInput, Modal, ActivityIndicator } from "react-native";
 import { SliderBox } from "react-native-image-slider-box";
 import { Rating } from 'react-native-ratings';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
+import _ from 'lodash';
 
 class Main extends React.Component {
 
-    state = {
-        isSelfCare: true,
-        
-        images: [
-            "https://source.unsplash.com/1024x768/?nature",
-            "https://source.unsplash.com/1024x768/?water",
-            "https://source.unsplash.com/1024x768/?girl",
-            "https://source.unsplash.com/1024x768/?tree", // Network image
-            //require('./assets/images/girl.jpg'),          // Local image
-        ]
+    constructor(props) {
+        super();
+        this.state = {
+            isSelfCare: true,
+            images: [
+                "https://source.unsplash.com/1024x768/?nature",
+                "https://source.unsplash.com/1024x768/?water",
+                "https://source.unsplash.com/1024x768/?girl",
+                "https://source.unsplash.com/1024x768/?tree", // Network image
+                //require('./assets/images/girl.jpg'),          // Local image
+            ],
+            imageData: props.imageData,
+            serviceData: props.serviceData 
+        }
     }
 
     componentDidMount = () => {
-        return this.getServiceas(),
-            this.getSliderImage();
+        // this.props.getSliderImage();
+        // this.props.getServices();
+        return this.getSliderImage(),
+        this.getServiceas();
     };
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    //     if (!_.isEqual(nextProps.imageData, prevState.imageData)) {
+    //         return {
+    //             imageData: nextProps.imageData
+    //         }
+    //     }
+    //     if (!_.isEqual(nextProps.imageData, prevState.imageData)) {
+    //         return {
+    //             serviceData: nextProps.serviceData
+    //         }
+    //     }
+    //     return null;
+    // }
+    // componentDidUpdate(prevProps, prevState) {
 
+    //     if (!_.isEqual(prevProps.imageData, this.props.imageData)) {
+    //         this.setState({ imageData: this.props.imageData });
+    //     }
+    //     if (!_.isEqual(prevProps.imageData, this.props.imageData)) {
+    //         this.setState({ serviceData: this.props.serviceData });
+    //     }
+    // }
     getSliderImage() {
         return fetch('http://testing.demo2server.com/careapp/carcare/api/v1/self-care', { method: 'GET' })
             .then((response) => response.json())
             .then((json) => {
-                console.log("Slider Image Data : ", json.data)
-                // this.setState({ serviceData: json.data.data })
+                this.setState({ serviceData: json.data.data })
             }
             )
             .catch((error) => console.error(error))
@@ -84,17 +113,21 @@ class Main extends React.Component {
             //Props to open/close the drawer
             props.navigationProps.toggleDrawer();
         };
-
-        return (
+        // let imgAry = [];
+        // this.state.imageData.forEach(item => {
+        //     imgAry.push(item.image);
+        // })
+        return (    
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
                 {this.getHeader(navigation)}
-                <SafeAreaView style={{flex: 1}}>
+                <SafeAreaView>
                     <View style={[styles.buttonContainer, { marginBottom: 8, marginTop: 8 }]} >
                         <SliderBox ImageComponentStyle={{ borderRadius: 6, width: '92%', marginTop: 2, }} sliderBoxHeight={160} images={this.state.images} />
                     </View>
                     {this.state.isSelfCare ? (
                         <FlatList
-                            data={this.state.serviceData}
+                            data={this.state.serviceData.data}
+                            data={this.state.s}
                             renderItem={this.renderItem}
                             keyExtractor={item => item.id.toString()} />
                     ) : null}
@@ -214,7 +247,13 @@ class Main extends React.Component {
 
 }
 
-export default Main;
+const mapStateToProps = (state) => {
+    return {
+        imageData: state.mainReducer.imageData ? state.mainReducer.imageData : [],
+        serviceData: state.mainReducer.serviceData ? state.mainReducer.serviceData : []
+    }
+}
+export default connect(mapStateToProps, actions.allActions)(Main);
 
 const styles = StyleSheet.create({
     container: {
