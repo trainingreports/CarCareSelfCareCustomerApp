@@ -28,8 +28,8 @@ class VerifyOtp extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     var mobileNo = this.props.route.params.mobileNo;
     if(prevProps.response_data !== this.props.response_data) {
-      this.props.navigation.navigate('ResetPassword', { mobileNo});
       this.setState({response_data: this.props.response_data})
+      this.props.navigation.navigate('ResetPassword', { mobileNo});
     }
   }
   handleSubmit = (mobileNo) => {
@@ -37,7 +37,10 @@ class VerifyOtp extends React.Component {
     if (this.state.otp == "") {
       alert("Please Enter the OTP")
     } else {
-      this.props.verifyOtp(mobileNo, this.state.otp);
+      let data = new FormData();
+      data.append('phone', mobileNo);
+      data.append('otp', this.state.otp);
+      this.props.verifyOtp(data);
       // data.append('phone', mobileNo);
       // data.append('otp', this.state.otp);
       // var BASE_URl = 'http://testing.demo2server.com/careapp/carcare/api/v1/';

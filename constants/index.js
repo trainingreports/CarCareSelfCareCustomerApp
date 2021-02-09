@@ -10,5 +10,7 @@ export default {
     RESET_PASSWORD: 'reset-password',
     SIGNUP_USER: 'signup-user',
     GET_SLIDE_IMAGE: 'get-slide-image',
-    GET_SERVICES_DATA: 'get-services-data'
+    GET_SERVICES_DATA: 'get-services-data',
+    CHECK_MOBILE_NUMBER: 'check-mobile-number',
+    CHECK_EMAIL: 'check-email'
 }

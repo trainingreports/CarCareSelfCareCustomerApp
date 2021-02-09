@@ -23,7 +23,7 @@ class Login extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if(nextProps.user_data.id !== prevState.user_data.id) {
+    if(nextProps.user_data !== prevState.user_data) {
       return {
         user_data: nextProps.user_data
       }
@@ -31,9 +31,8 @@ class Login extends React.Component {
     return null;
   }
   componentDidUpdate(prevProps, prevState) {
-    this.props.navigation.navigate("App");
 
-    if(prevProps.user_data.id !== this.props.user_data.id){
+    if(prevProps.user_data !== this.props.user_data){
       this.setState({ user_data: this.props.user_data});
       this.props.navigation.navigate("App");
     }
@@ -45,7 +44,10 @@ class Login extends React.Component {
     } else if (this.state.password == "") {
       alert("Please Ender the Password")
     } else {
-      this.props.userLogin(this.state.email, this.state.password);
+      let data = new FormData();
+      data.append('email', this.state.email);
+      data.append('password', this.state.password);
+      this.props.userLogin(data);
       // data.append('email', this.state.email);
       // data.append('password', this.state.password);
       // var BASE_URl = 'http://testing.demo2server.com/careapp/carcare/api/v1/';
@@ -171,7 +173,7 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    user_data: state.userLoginReducer.user_data ? state.userLoginReducer.user_data : {}
+    user_data: state.userLoginReducer.user_data
   }
 }
 export default connect(mapStateToProps, actions.allActions)(Login);

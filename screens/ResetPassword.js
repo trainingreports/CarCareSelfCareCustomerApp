@@ -28,8 +28,8 @@ class ResetPassword extends React.Component {
       }
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.reset_password !== this.props.reset_password) {
-            this.props.navigation.navigate('Login');
             this.setState({reset_password : this.props.reset_password});
+            this.props.navigation.navigate('Login');
         }
     }
     handleSubmit = (mobileNo) => {
@@ -41,7 +41,10 @@ class ResetPassword extends React.Component {
         }  else if (this.state.passowrd !== this.state.confirmPassowrd) {
             alert("Entered Password not match")
         } else {
-            this.props.resetPwd(mobileNo, this.state.passowrd);
+            let data = new FormData();
+            data.append('phone', mobileNo);
+            data.append('password', this.state.passowrd);
+            this.props.resetPwd(data);
             // data.append('phone', mobileNo);
             // data.append('password', this.state.passowrd);
             // var BASE_URl = 'http://testing.demo2server.com/careapp/carcare/api/v1/';

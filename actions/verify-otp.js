@@ -1,12 +1,12 @@
 import axios from 'axios';
 import constants from '../constants';
 
-export function verifyOtp(phone, otp) {
+export function verifyOtp(data) {
 
     const { USER_CHECK_OTP, BASE_URL } = constants;
     
     return function (dispatch) {
-        return axios.post(`${BASE_URL}user-check-otp`, {phone, otp})
+        return axios.post(`${BASE_URL}user-check-otp`, data)
             .then(response => {
                 if(response.data) {
                     if (response.data.status) {

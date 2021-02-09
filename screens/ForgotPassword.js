@@ -146,7 +146,7 @@ class ForgotPassword extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    recover_pwd: state.forgotPwdReducer.recover_pwd ? state.forgotPwdReducer.recover_pwd : {}
+    recover_pwd: state.forgotPwdReducer.recover_pwd ? state.forgotPwdReducer.recover_pwd : ""
   }
 }
 export default connect(mapStateToProps, actions.allActions)(ForgotPassword);

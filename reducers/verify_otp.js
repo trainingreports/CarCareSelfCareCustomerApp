@@ -4,7 +4,7 @@ const initialState = [];
 export default function userCheckReducer (state = initialState, action) {
     switch (action.type) {
         case USER_CHECK_OTP:
-            return { ...state, response_data: action.Payload ? action.Payload : {} };
+            return { ...state, response_data: action.Payload ? action.Payload : false };
         default:
             return state
     }

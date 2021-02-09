@@ -1,15 +1,15 @@
 import axios from 'axios';
 import constants from '../constants';
 
-export function resetPwd(phone, password) {
+export function resetPwd(data) {
 
     const { RESET_PASSWORD, BASE_URL } = constants;
     
     return function (dispatch) {
-        return axios.post(`${BASE_URL}user-reset-password`, { phone, password })
+        return axios.post(`${BASE_URL}user-reset-password`, data)
             .then(response => {
                 if(response.data) {
-                    if (!response.data.status) {
+                    if (response.data.status) {
                         dispatch({
                             type: RESET_PASSWORD,
                             Payload: response.data.data

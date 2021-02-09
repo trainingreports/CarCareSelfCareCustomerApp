@@ -10,7 +10,7 @@ export function userForgotPwd(phone) {
     return function (dispatch) {
         return axios.post(`${BASE_URL}user-forgot-password`, phone)
             .then(response => {
-                if (response.status) {
+                if (response.data.status) {
                     dispatch({
                         type: FORGOT_PWD,
                         Payload: response.data.data

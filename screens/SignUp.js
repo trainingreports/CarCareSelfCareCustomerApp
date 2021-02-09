@@ -25,83 +25,88 @@ class SignUp extends React.Component {
       city: "",
       country: "",
       password: "",
-      signup_data: props.signup_data
+      signup_data: props.signup_data,
+      check_mobile: props.check_mobile,
+      check_email: props.check_email
     }
   }
 
   checkEmailId = () => {
     var data = new FormData();
     data.append('email', this.state.email);
+    this.props.checkEmail(data);
+    // var BASE_URl = 'http://testing.demo2server.com/careapp/carcare/api/v1/';
 
-    var BASE_URl = 'http://testing.demo2server.com/careapp/carcare/api/v1/';
-
-    var config = {
-      method: 'post',
-      url: BASE_URl + 'check-email',
-      data: data
-    };
-    var me = this;
-    axios(config)
-      .then(function (response) {
-        if (response.data) {
-          console.log(response.data.status)
-          if (response.data.status) {
-            me.setState({ isEmailExist: false })
-          } else {
-            me.setState({ isEmailExist: true })
-          }
-        } else {
-          alert("Something went wrong!");
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // var config = {
+    //   method: 'post',
+    //   url: BASE_URl + 'check-email',
+    //   data: data
+    // };
+    // var me = this;
+    // axios(config)
+    //   .then(function (response) {
+    //     if (response.data) {
+    //       console.log(response.data.status)
+    //       if (response.data.status) {
+    //         me.setState({ isEmailExist: false })
+    //       } else {
+    //         me.setState({ isEmailExist: true })
+    //       }
+    //     } else {
+    //       alert("Something went wrong!");
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   }); 
   }
 
   checkMobileNumber = () => {
     var data = new FormData();
     data.append('phone', this.state.mobileNumber);
+    this.props.checkMobileNumber(data);
+    // var BASE_URl = 'http://testing.demo2server.com/careapp/carcare/api/v1/';
 
-    var BASE_URl = 'http://testing.demo2server.com/careapp/carcare/api/v1/';
-
-    var config = {
-      method: 'post',
-      url: BASE_URl + 'check-phone',
-      data: data
-    };
-    var me = this;
-    axios(config)
-      .then(function (response) {
-        if (response.data) {
-          console.log(response.data.status)
-          if (response.data.status) {
-            me.setState({ isNumberExist: false })
-          } else {
-            me.setState({ isNumberExist: true })
-          }
-        } else {
-          alert("Something went wrong!");
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // var config = {
+    //   method: 'post',
+    //   url: BASE_URl + 'check-phone',
+    //   data: data
+    // };
+    // var me = this;
+    // axios(config)
+    //   .then(function (response) {
+    //     if (response.data) {
+    //       console.log(response.data.status)
+    //       if (response.data.status) {
+    //         me.setState({ isNumberExist: false })
+    //       } else {
+    //         me.setState({ isNumberExist: true })
+    //       }
+    //     } else {
+    //       alert("Something went wrong!");
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.signup_data !== prevState.signup_data) {
       return {signup_data: nextProps.signup_data}
     }
+    if(nextProps.check_mobile !== prevState.check_mobile) {
+      return { check_mobile: nextProps.check_mobile, isNumberExist: false }
+    }
+    if(nextProps.check_email !== prevState.check_email) {
+      return { check_email: nextProps.check_email, isEmailExist: false }
+    }
     return null;
   }
   componentDidUpdate(prevProps, prevState) {
-    this.props.navigation.navigate('App');
-
     if (prevProps.signup_data !== this.props.signup_data)
     {
       alert("Sign Up successfully!");
-      this.setState({signup_data: this.props.signup_data})
-      this.props.navigation.navigate('App');
+      this.props.navigation.navigate('Login');
     }
   }
   submitHandle = () => {
@@ -129,14 +134,13 @@ class SignUp extends React.Component {
       alert("Please Select Privacy Policy Checkbox")
     }
     else {
-      this.props.signup_user(name, email, mobileNumber, city, country, password);
-      // data.append('name', this.state.name);
-      // data.append('email', this.state.email);
-      // data.append('phone', this.state.mobileNumber);
-      // data.append('city', this.state.city);
-      // data.append('country', this.state.country);
-      // data.append('password', this.state.password);
-
+      data.append('name', name);
+      data.append('email', email);
+      data.append('phone', mobileNumber);
+      data.append('city', city);
+      data.append('country', country);
+      data.append('password', password);
+      this.props.signup_user(data);
       // var BASE_URl = 'http://testing.demo2server.com/careapp/carcare/api/v1/';
 
       // var config = {
@@ -338,7 +342,9 @@ class SignUp extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    signup_data: state.signupReducer.signup_data
+    signup_data: state.signupReducer.signup_data,
+    check_mobile: state.signupReducer.check_mobile,
+    check_email: state.signupReducer.check_email
   }
 }
 export default connect(mapStateToProps, actions.allActions)(SignUp);
